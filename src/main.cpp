@@ -31,7 +31,7 @@ CTxMemPool mempool;
 unsigned int nTransactionsUpdated = 0;
 
 map<uint256, CBlockIndex*> mapBlockIndex;
-uint256 hashGenesisBlock("0x2407d8beeb606ed844b7aa05655a35ec975c56f5ba3ab975a277787cb7d15ea0");
+uint256 hashGenesisBlock("0xccb126c0c5903f153eb1feb22409524d5e21a8c93a68c46572b71b15509c7b6a");
 static CBigNum bnProofOfWorkLimit(~uint256(0) >> 20); // Hitecoin: starting difficulty is 1 / 2^12
 CBlockIndex* pindexGenesisBlock = NULL;
 int nBestHeight = -1;
@@ -2777,7 +2777,7 @@ bool InitBlockIndex() {
         //   vMerkleTree: 97ddfbbae6
 
         // Genesis block
-        const char* pszTimestamp = "Chromecast vs. Roku : Who Wins This Streaming Media Stick Fight?!";
+        const char* pszTimestamp = "Chromecast vs. Roku : Who Wins This Streaming Media Stick Fight?!!";
         CTransaction txNew;
         txNew.vin.resize(1);
         txNew.vout.resize(1);
@@ -2789,13 +2789,13 @@ bool InitBlockIndex() {
         block.hashPrevBlock = 0;
         block.hashMerkleRoot = block.BuildMerkleTree();
         block.nVersion = 1;
-        block.nTime    = 1395282600;//3 / 20 / 2014 @ 2:30:0 UTC
+        block.nTime    = 1395298800;//3 / 20 / 2014 @ 2:30:0 UTC
         block.nBits    = 0x1e0ffff0;
-        block.nNonce   = 2030943609;
+        block.nNonce   = 2031470318;
 
         if (fTestNet)
         {
-            block.nTime    = 1395282600;//3 / 12 / 2014 @ 11:0:0 UTC
+            block.nTime    = 1395298800;//3 / 12 / 2014 @ 11:0:0 UTC
             block.nNonce   = 2030943609;
         }
 
@@ -2849,7 +2849,7 @@ bool InitBlockIndex() {
 //                            printf("block.GetHash = %s\n", block.GetHash().ToString().c_str());
 //                        }
 
-        assert(block.hashMerkleRoot == uint256("0xd17737cfbaaab87e15964a8e22a3557eac794c30e5bb7f43a5294b0447d4e86b"));
+        assert(block.hashMerkleRoot == uint256("0x1e93b492e645e691ea6757b7c689114f0580c82c51afa94b4e480f041b386f57"));
         block.print();
         assert(hash == hashGenesisBlock);
 
