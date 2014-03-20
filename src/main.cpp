@@ -31,7 +31,7 @@ CTxMemPool mempool;
 unsigned int nTransactionsUpdated = 0;
 
 map<uint256, CBlockIndex*> mapBlockIndex;
-uint256 hashGenesisBlock("0xd9d23a1d30832f4575c54440a82dbfbca1656dad63cc4ed7348d3c6a36fe771f");
+uint256 hashGenesisBlock("0x2407d8beeb606ed844b7aa05655a35ec975c56f5ba3ab975a277787cb7d15ea0");
 static CBigNum bnProofOfWorkLimit(~uint256(0) >> 20); // Hitecoin: starting difficulty is 1 / 2^12
 CBlockIndex* pindexGenesisBlock = NULL;
 int nBestHeight = -1;
@@ -1065,12 +1065,27 @@ int64 static GetBlockValue(int nHeight, int64 nFees)
 {
     int64 nSubsidy = 1000 * COIN;
 
-    // Subsidy is cut in half every 840000 blocks, which will occur approximately every 4 years
-    nSubsidy *= (nHeight / 34560 + 1); // Hitecoin: 34560 blocks in ~2 months
-
-    if(nSubsidy > 10000 * COIN) {
-    	nSubsidy = 10000 * COIN;
+    // Subsidy is cut in half every 34560 blocks, which will occur approximately every 2 months
+    int64 nMultiplier = nHeight / 34560 + 1;
+    if(nMultiplier <= 15)
+    {
+    	nSubsidy *= nMultiplier;
+    	    if(nSubsidy > 10000 * COIN)
+    	    {
+    	    	nSubsidy = 10000 * COIN;
+    	    }
     }
+    else
+    {
+    	nSubsidy = 10000 * COIN;
+    	// Subsidy is cut in half approximately every 6 months
+    	nSubsidy >>= ((nMultiplier - 16) / 3 +1);
+    	if(nSubsidy < 1000)
+    	{
+    		nSubsidy = 1000;
+    	}
+    }
+
     if(nHeight == 1){
     	nSubsidy = 50000000 * COIN;
     }
@@ -2762,7 +2777,7 @@ bool InitBlockIndex() {
         //   vMerkleTree: 97ddfbbae6
 
         // Genesis block
-        const char* pszTimestamp = "Chromecast vs. Roku : Who Wins This Streaming Media Stick Fight?";
+        const char* pszTimestamp = "Chromecast vs. Roku : Who Wins This Streaming Media Stick Fight?!";
         CTransaction txNew;
         txNew.vin.resize(1);
         txNew.vout.resize(1);
@@ -2774,14 +2789,14 @@ bool InitBlockIndex() {
         block.hashPrevBlock = 0;
         block.hashMerkleRoot = block.BuildMerkleTree();
         block.nVersion = 1;
-        block.nTime    = 1394708400;//3 / 12 / 2014 @ 12:0:0 UTC
+        block.nTime    = 1395282600;//3 / 20 / 2014 @ 2:30:0 UTC
         block.nBits    = 0x1e0ffff0;
-        block.nNonce   = 2028761084;
+        block.nNonce   = 2030943609;
 
         if (fTestNet)
         {
-            block.nTime    = 1394701200;//3 / 12 / 2014 @ 11:0:0 UTC
-            block.nNonce   = 325270584;
+            block.nTime    = 1395282600;//3 / 12 / 2014 @ 11:0:0 UTC
+            block.nNonce   = 2030943609;
         }
 
         //// debug print
@@ -2834,7 +2849,7 @@ bool InitBlockIndex() {
 //                            printf("block.GetHash = %s\n", block.GetHash().ToString().c_str());
 //                        }
 
-        assert(block.hashMerkleRoot == uint256("0xda07e48e004e607c8aa5e1fa67e5d49ba09b4369c4364e7ab058249e8926a725"));
+        assert(block.hashMerkleRoot == uint256("0xd17737cfbaaab87e15964a8e22a3557eac794c30e5bb7f43a5294b0447d4e86b"));
         block.print();
         assert(hash == hashGenesisBlock);
 
